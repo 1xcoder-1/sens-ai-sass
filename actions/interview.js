@@ -241,7 +241,35 @@ export async function submitAssessmentAnswers(assessmentId, answers) {
       },
     });
 
-    return updatedAssessment;
+    // Create a detailed result object that matches what QuizResult expects
+    const result = {
+      ...updatedAssessment,
+      questions: assessment.questions.map((question, index) => {
+        const userAnswer = answers[index];
+        const isCorrect = userAnswer === question.correctAnswer;
+        
+        // Get the correct answer text from the options array
+        let correctAnswerText = question.correctAnswer;
+        if (question.options && question.correctAnswer) {
+          // Convert letter answer (A, B, C, D) to the actual text
+          const answerIndex = question.correctAnswer.charCodeAt(0) - 65; // A=0, B=1, etc.
+          if (answerIndex >= 0 && answerIndex < question.options.length) {
+            correctAnswerText = question.options[answerIndex];
+          }
+        }
+        
+        return {
+          question: question.question,
+          userAnswer: userAnswer,
+          correctAnswerText: correctAnswerText,
+          isCorrect: isCorrect,
+          explanation: question.explanation
+        };
+      }),
+      improvementTip: "Review the questions you answered incorrectly and study the explanations provided."
+    };
+
+    return result;
   } catch (error) {
     console.error("Error submitting assessment answers:", error);
     throw new Error("Failed to submit assessment answers");
