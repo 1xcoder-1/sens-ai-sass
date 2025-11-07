@@ -237,13 +237,17 @@ export async function submitAssessmentAnswers(assessmentId, answers) {
       },
       data: {
         quizScore: quizScore,
-        completedAt: new Date(),
+        // Removed completedAt field as it doesn't exist in the schema
       },
     });
 
-    // Create a detailed result object that matches what QuizResult expects
+    // Create a detailed result object with only serializable data
     const result = {
-      ...updatedAssessment,
+      id: updatedAssessment.id,
+      quizScore: updatedAssessment.quizScore,
+      category: updatedAssessment.category,
+      createdAt: updatedAssessment.createdAt,
+      updatedAt: updatedAssessment.updatedAt,
       questions: assessment.questions.map((question, index) => {
         const userAnswer = answers[index];
         const isCorrect = userAnswer === question.correctAnswer;
