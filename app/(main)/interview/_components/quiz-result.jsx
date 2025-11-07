@@ -63,7 +63,7 @@ export default function QuizResult({
                   r="40"
                   fill="transparent"
                   strokeDasharray="251.2"
-                  strokeDashoffset={251.2 - (251.2 * result.quizScore) / 100}
+                  strokeDashoffset={251.2 - (251.2 * (result.quizScore || 0)) / 100}
                   transform="rotate(-90 50 50)"
                 ></circle>
                 <text
@@ -73,13 +73,13 @@ export default function QuizResult({
                   textAnchor="middle"
                   dy="0.3em"
                 >
-                  {result.quizScore.toFixed(1)}%
+                  {(result.quizScore || 0).toFixed(1)}%
                 </text>
               </svg>
             </div>
           </div>
-          <h3 className="text-2xl font-bold">{result.quizScore.toFixed(1)}%</h3>
-          <Progress value={result.quizScore} className="w-full h-3" />
+          <h3 className="text-2xl font-bold">{(result.quizScore || 0).toFixed(1)}%</h3>
+          <Progress value={result.quizScore || 0} className="w-full h-3" />
           <p className="text-muted-foreground">
             You answered {correctAnswers} out of {totalQuestions} questions correctly
           </p>
@@ -109,7 +109,7 @@ export default function QuizResult({
           </div>
           <div className="bg-muted p-3 rounded-lg text-center">
             <Trophy className="h-5 w-5 mx-auto text-yellow-500" />
-            <p className="text-2xl font-bold">{Math.round(result.quizScore)}</p>
+            <p className="text-2xl font-bold">{Math.round(result.quizScore || 0)}</p>
             <p className="text-xs text-muted-foreground">Score</p>
           </div>
         </motion.div>
@@ -138,7 +138,7 @@ export default function QuizResult({
         >
           <h3 className="font-medium mb-3 text-foreground">Question Review</h3>
           <div className="space-y-4">
-            {result.questions.map((q, index) => (
+            {result.questions && result.questions.map((q, index) => (
               <motion.div 
                 key={index} 
                 className="border rounded-lg p-4 space-y-3"
