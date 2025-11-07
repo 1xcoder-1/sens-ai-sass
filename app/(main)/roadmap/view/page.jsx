@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import RoadmapVisualizer from "../_components/roadmap-visualizer";
 import RoadmapSteps from "../_components/roadmap-steps";
-import { getRoadmapById, updateRoadmapProgress } from "@/actions/roadmap";
+import { getRoadmapById, updateRoadmapProgress, saveRoadmap } from "@/actions/roadmap";
 import { motion } from "framer-motion";
 import { 
   Map, 
@@ -297,6 +297,10 @@ function RoadmapViewContent() {
                     {roadmapData.description}
                   </CardDescription>
                 </div>
+                <Button onClick={handleSaveRoadmap} className="w-full md:w-auto">
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Roadmap
+                </Button>
               </div>
             </CardHeader>
             <CardContent>
