@@ -28,8 +28,10 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Suspense } from 'react';
 
-export default function RoadmapViewPage() {
+// Separate component for the main content that uses useSearchParams
+function RoadmapViewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roadmapId = searchParams.get('id');
@@ -330,5 +332,23 @@ export default function RoadmapViewPage() {
       {/* Spacer to prevent content from touching footer */}
       <div className="h-8"></div>
     </div>
+  );
+}
+
+// Loading component for Suspense fallback
+function LoadingSpinner() {
+  return (
+    <div className="flex justify-center items-center h-64">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>
+  );
+}
+
+// Main page component wrapped in Suspense
+export default function RoadmapViewPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <RoadmapViewContent />
+    </Suspense>
   );
 }
